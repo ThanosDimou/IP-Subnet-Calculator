@@ -165,7 +165,6 @@ def Calculate():
 root = Tk()
 root.title("Determine network address")
 
-
 #create labels
 myLabel=Label(root, text="IP address")
 myLabel.grid(row=0,column=0, sticky=W)
