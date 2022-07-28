@@ -164,19 +164,16 @@ def Calculate():
 
 root = Tk()
 root.title("Determine network address")
-#root.geometry("300x200")
-#root.resizable(0,0)
+
 #create labels
 myLabel=Label(root, text="IP address")
 myLabel.grid(row=0,column=0, sticky=W)
 myLabel=Label(root, text="Subnet mask")
 myLabel.grid(row=1,column=0, sticky=W)
 
-
 #create button
 myButton=Button(root, text="Calculate", command=Calculate)
 myButton.grid(row=3, column=1)
-
 
 #create entry fields to insert IP address and subnet mask
 ip_address_field = Entry(root)
