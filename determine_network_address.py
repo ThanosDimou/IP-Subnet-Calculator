@@ -174,6 +174,9 @@ myLabel.grid(row=1,column=0, sticky=W)
 #create button
 myButton=Button(root, text="Calculate", command=Calculate)
 myButton.grid(row=3, column=1)
+#button background color
+myButton.config(background="light blue")
+
 
 #create entry fields to insert IP address and subnet mask
 ip_address_field = Entry(root)
