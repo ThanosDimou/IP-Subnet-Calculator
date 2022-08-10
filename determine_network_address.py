@@ -177,6 +177,7 @@ myButton.grid(row=3, column=1)
 myButton.config(background="light blue")
 
 
+
 #create entry fields to insert IP address and subnet mask
 ip_address_field = Entry(root)
 ip_address_field.grid(row=0, column=1)
