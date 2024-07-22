@@ -181,7 +181,7 @@ def redirect_output():
 
 # GUI setup
 root = tk.Tk()
-root.title("Enhanced Network Address Calculator")
+root.title(" NetAddress Analyzer")
 
 # Create labels and entry fields
 tk.Label(root, text="IP Address:").grid(row=0, column=0, sticky=tk.W, padx=10, pady=5)
