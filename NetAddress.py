@@ -1,8 +1,50 @@
+from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import messagebox, ttk
 import ipaddress
 import sys
 import io
+import json
+import os
+
+
+def load_language(lang):
+    try:
+        with open(os.path.join("locales", f"{lang}.json"), "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        messagebox.showerror("Error", f"Language file {lang}.json not found")
+        return None
+
+# Φόρτωση αρχείων γλώσσας
+languages = {
+    "en": load_language("en"),
+    "el": load_language("el")
+}
+
+# Επιλεγμένη γλώσσα
+current_language = "en"
+texts = languages[current_language]
+
+def change_language(lang):
+    global current_language, texts
+    current_language = lang
+    texts = languages[current_language]
+    root.title(texts["title"])
+    ip_label.config(text=texts["ip_address"])
+    mask_label.config(text=texts["subnet_mask"])
+    new_subnet_label.config(text=texts["new_subnet_prefix"])
+    calculate_button.config(text=texts["calculate"])
+    clear_button.config(text=texts["clear"])
+    copy_button.config(text=texts["copy_results"])
+     # lang_button.config(text=texts["language"])
+
+def load_flag_image(path, size=(24, 24)):
+    image = Image.open(path)
+    image = image.resize(size, Image.ANTIALIAS)
+    return ImageTk.PhotoImage(image)
+
+
 
 def is_valid_ip(ip):
     try:
@@ -181,12 +223,19 @@ def redirect_output():
 
 # GUI setup
 root = tk.Tk()
-root.title("NetAddress Analyzer__")
+root.title(texts["title"])
+
+# Load flag images
+us_flag = load_flag_image("images/us.png")
+gr_flag = load_flag_image("images/gr.png")
 
 # Create labels and entry fields
-tk.Label(root, text="IP Address:").grid(row=0, column=0, sticky=tk.W, padx=10, pady=5)
-tk.Label(root, text="Subnet Mask:").grid(row=1, column=0, sticky=tk.W, padx=10, pady=5)
-tk.Label(root, text="New Subnet Prefix:").grid(row=2, column=0, sticky=tk.W, padx=10, pady=5)
+ip_label = tk.Label(root, text=texts["ip_address"])
+ip_label.grid(row=0, column=0, sticky=tk.W, padx=10, pady=5)
+mask_label = tk.Label(root, text=texts["subnet_mask"])
+mask_label.grid(row=1, column=0, sticky=tk.W, padx=10, pady=5)
+new_subnet_label = tk.Label(root, text=texts["new_subnet_prefix"])
+new_subnet_label.grid(row=2, column=0, sticky=tk.W, padx=10, pady=5)
 
 ip_address_field = tk.Entry(root)
 ip_address_field.grid(row=0, column=1, padx=10, pady=5)
@@ -196,12 +245,21 @@ new_subnet_prefix_field = tk.Entry(root)
 new_subnet_prefix_field.grid(row=2, column=1, padx=10, pady=5)
 
 # Create buttons
-calculate_button = tk.Button(root, text="Calculate", command=calculate, bg="light blue")
+calculate_button = tk.Button(root, text=texts["calculate"], command=calculate, bg="light blue")
 calculate_button.grid(row=3, column=0, pady=10)
-clear_button = tk.Button(root, text="Clear", command=clear_fields, bg="light gray")
+clear_button = tk.Button(root, text=texts["clear"], command=clear_fields, bg="light gray")
 clear_button.grid(row=3, column=1, pady=10)
-copy_button = tk.Button(root, text="Copy Results", command=copy_results, bg="light green")
+copy_button = tk.Button(root, text=texts["copy_results"], command=copy_results, bg="light green")
 copy_button.grid(row=3, column=2, pady=10)
+
+# Create flag buttons for language selection
+flag_frame = tk.Frame(root)
+flag_frame.grid(row=0, column=2, padx=10, pady=5, sticky=tk.E)
+
+us_flag_button = tk.Button(flag_frame, image=us_flag, command=lambda: change_language("en"))
+us_flag_button.pack(side=tk.LEFT, padx=2)
+gr_flag_button = tk.Button(flag_frame, image=gr_flag, command=lambda: change_language("el"))
+gr_flag_button.pack(side=tk.LEFT, padx=2)
 
 # Create result display
 result_text = tk.StringVar()
