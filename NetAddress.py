@@ -1,11 +1,40 @@
 from PIL import Image, ImageTk
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox, ttk, filedialog
 import ipaddress
 import sys
 import io
-import json
 import os
+import json
+import csv
+
+def export_to_csv():
+    # Get the results from result_text
+    results = result_text.get().strip().split('\n')
+    
+    if not results or all(result == "" for result in results):
+        messagebox.showwarning("No Results", "There are no results to export.")
+        return
+    
+    # Open a dialog window for the user to choose where to save the file
+    file_path = filedialog.asksaveasfilename(defaultextension='.csv',
+                                             filetypes=[("CSV files", "*.csv")])
+    
+    if file_path:
+        try:
+            with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
+                csv_writer = csv.writer(csvfile)
+                csv_writer.writerow(['Parameter', 'Value'])  # Write the header
+                
+                for result in results:
+                    if ':' in result:
+                        parameter, value = result.split(':', 1)
+                        csv_writer.writerow([parameter.strip(), value.strip()])
+                
+            messagebox.showinfo("Export Successful", f"Results exported to {file_path}")
+        except Exception as e:
+            messagebox.showerror("Export Error", f"Failed to export results: {e}")
+
 
 
 def load_language(lang):
@@ -37,11 +66,15 @@ def change_language(lang):
     calculate_button.config(text=texts["calculate"])
     clear_button.config(text=texts["clear"])
     copy_button.config(text=texts["copy_results"])
+    export_button.config(text=texts["export_to_csv"])
      # lang_button.config(text=texts["language"])
 
 def load_flag_image(path, size=(24, 24)):
+    if not os.path.exists(path):
+        print(f"Warning: Image file not found: {path}")
+        return None
     image = Image.open(path)
-    image = image.resize(size, Image.ANTIALIAS)
+    image = image.resize(size, Image.LANCZOS)
     return ImageTk.PhotoImage(image)
 
 
@@ -154,7 +187,7 @@ def calculate():
                             f"Number of subnets: {calculate_subnets(network, int(new_subnet_prefix)) if new_subnet_prefix else 'N/A'}")
         else:  # IPv6
             network = ipaddress.ip_network(f"{ip_address}/{cidr}", strict=False)
-            first_usable = network.network_address
+            first_usable = network.network_address + 1
             last_usable = network.network_address + network.num_addresses - 1
             result_text.set(f"Network address: {network.network_address}\n"
                             f"Subnet mask: /{network.prefixlen}\n"
@@ -251,6 +284,11 @@ clear_button = tk.Button(root, text=texts["clear"], command=clear_fields, bg="li
 clear_button.grid(row=3, column=1, pady=10)
 copy_button = tk.Button(root, text=texts["copy_results"], command=copy_results, bg="light green")
 copy_button.grid(row=3, column=2, pady=10)
+
+# Create export to CSV button
+export_button = tk.Button(root, text=texts["export_to_csv"], command=export_to_csv, bg="light yellow")
+export_button.grid(row=3, column=3, pady=10)
+
 
 # Create flag buttons for language selection
 flag_frame = tk.Frame(root)

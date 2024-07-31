@@ -13,5 +13,6 @@
     "invalid_network": "Invalid network",
     "copied": "Copied",
     "results_copied": "Results copied to clipboard",
-    "language": "Language"
+    "language": "Language",
+    "export_to_csv" : "Export to CSV"
 }
