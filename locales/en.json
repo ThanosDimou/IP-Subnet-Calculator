@@ -14,5 +14,6 @@
     "copied": "Copied",
     "results_copied": "Results copied to clipboard",
     "language": "Language",
-    "export_to_csv" : "Export to CSV"
+    "export_to_csv" : "Export to CSV",
+    "export_to_pdf": "Export to PDF"
 }

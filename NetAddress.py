@@ -7,6 +7,11 @@ import io
 import os
 import json
 import csv
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
 
 def export_to_csv():
     # Get the results from result_text
@@ -35,7 +40,54 @@ def export_to_csv():
         except Exception as e:
             messagebox.showerror("Export Error", f"Failed to export results: {e}")
 
+def export_to_pdf():
+    # Get the IP address from the input field
+    ip_address = ip_address_field.get().strip()
 
+    # Get the results from result_text
+    results = result_text.get().strip().split('\n')
+    
+    if not results or all(result == "" for result in results):
+        messagebox.showwarning("No Results", "There are no results to export.")
+        return
+    
+    # Open a dialog window for the user to choose where to save the file
+    file_path = filedialog.asksaveasfilename(defaultextension='.pdf',
+                                             filetypes=[("PDF files", "*.pdf")])
+    
+    if file_path:
+        try:
+            doc = SimpleDocTemplate(file_path, pagesize=letter)
+            styles = getSampleStyleSheet()
+            elements = []
+            
+            title_text = f"IP Calculation Results for {ip_address}"
+            title = Paragraph(title_text, styles['Title'])
+            elements.append(title)
+            elements.append(Spacer(1, 12))
+            
+            data = []
+            for result in results:
+                if ':' in result:
+                    parameter, value = result.split(':', 1)
+                    data.append([parameter.strip(), value.strip()])
+            
+            table = Table(data)
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ]))
+            
+            elements.append(table)
+            doc.build(elements)
+            messagebox.showinfo("Export Successful", f"Results exported to {file_path}")
+        except Exception as e:
+            messagebox.showerror("Export Error", f"Failed to export results: {e}")
 
 def load_language(lang):
     try:
@@ -67,6 +119,8 @@ def change_language(lang):
     clear_button.config(text=texts["clear"])
     copy_button.config(text=texts["copy_results"])
     export_button.config(text=texts["export_to_csv"])
+    export_button.config(text=texts["export_to_csv"])
+    pdf_export_button.config(text=texts["export_to_pdf"])
      # lang_button.config(text=texts["language"])
 
 def load_flag_image(path, size=(24, 24)):
@@ -288,6 +342,10 @@ copy_button.grid(row=3, column=2, pady=10)
 # Create export to CSV button
 export_button = tk.Button(root, text=texts["export_to_csv"], command=export_to_csv, bg="light yellow")
 export_button.grid(row=3, column=3, pady=10)
+
+# Create export to PDF button
+pdf_export_button = tk.Button(root, text=texts["export_to_pdf"], command=export_to_pdf, bg="light pink")
+pdf_export_button.grid(row=3, column=4, pady=10)
 
 
 # Create flag buttons for language selection
