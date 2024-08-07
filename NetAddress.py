@@ -12,6 +12,16 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+#test
+import networkx as nx
+import matplotlib.pyplot as plt
+
+vis_window = None
+fig = None
+ax = None
+canvas = None
 
 def export_to_csv():
     # Get the results from result_text
@@ -97,6 +107,24 @@ def load_language(lang):
         messagebox.showerror("Error", f"Language file {lang}.json not found")
         return None
 
+def visualize_network(network, new_prefix=None):
+    G = nx.Graph()
+
+    # Προσθήκη κόμβων και ακμών
+    subnets = list(network.subnets(new_prefix=new_prefix)) if new_prefix else [network]
+    for subnet in subnets:
+        G.add_node(str(subnet.network_address), label=f"{subnet.network_address}/{subnet.prefixlen}")
+
+    for i in range(len(subnets) - 1):
+        G.add_edge(str(subnets[i].network_address), str(subnets[i + 1].network_address))
+
+    # Σχεδίαση του γραφήματος
+    pos = nx.spring_layout(G)
+    labels = nx.get_node_attributes(G, 'label')
+    nx.draw(G, pos, with_labels=True, labels=labels, node_size=3000, node_color="lightblue", font_size=10, font_weight="bold", font_color="black")
+    plt.title("Network Visualization")
+    plt.show()
+
 # Φόρτωση αρχείων γλώσσας
 languages = {
     "en": load_language("en"),
@@ -121,6 +149,7 @@ def change_language(lang):
     export_button.config(text=texts["export_to_csv"])
     export_button.config(text=texts["export_to_csv"])
     pdf_export_button.config(text=texts["export_to_pdf"])
+    visualize_button.config(text=texts["visualize"])
      # lang_button.config(text=texts["language"])
 
 def load_flag_image(path, size=(24, 24)):
@@ -130,8 +159,6 @@ def load_flag_image(path, size=(24, 24)):
     image = Image.open(path)
     image = image.resize(size, Image.LANCZOS)
     return ImageTk.PhotoImage(image)
-
-
 
 def is_valid_ip(ip):
     try:
@@ -172,60 +199,60 @@ def cidr_to_subnet_mask(cidr, ip_version):
         return f"/{cidr}"  # Για IPv6, επιστρέφουμε το CIDR notation
 
 def calculate():
-    redirect_output()
-    ip_address = ip_address_field.get()
-    subnet_mask = subnet_mask_field.get()
-    
-    # Check if subnet mask does not start with '/' and handle it
-    if not subnet_mask.startswith('/'):
+    global current_graph  # Χρήση της παγκόσμιας μεταβλητής
+    global network  # Χρήση της παγκόσμιας μεταβλητής για το δίκτυο
+    global new_subnet_prefix  # Χρήση της παγκόσμιας μεταβλητής για το νέο πρόθεμα
+    current_graph = None  # Καθαρίστε το προηγούμενο γράφημα
+
+    try:
+        redirect_output()
+        ip_address = ip_address_field.get()
+        subnet_mask = subnet_mask_field.get()
+        
+        if not subnet_mask.startswith('/'):
+            # Χειρισμός της μάσκας υποδικτύου
+            try:
+                if '.' in subnet_mask or ':' in subnet_mask:
+                    subnet_mask = '/' + str(ipaddress.ip_network(f"0.0.0.0/{subnet_mask}", strict=False).prefixlen)
+                else:
+                    subnet_mask = '/' + subnet_mask
+            except ValueError:
+                messagebox.showerror("Error", "Invalid subnet mask")
+                return
+        
+        new_subnet_prefix = new_subnet_prefix_field.get()  # Διάβασμα της νέας υποδιεύθυνσης
+        if new_subnet_prefix:
+            if new_subnet_prefix.startswith('/'):
+                new_subnet_prefix = new_subnet_prefix[1:]  
+            try:
+                new_subnet_prefix = int(new_subnet_prefix)
+            except ValueError:
+                messagebox.showerror("Error", "Invalid new subnet prefix")
+                return
+
+        ip_obj = is_valid_ip(ip_address)
+        if not ip_obj:
+            messagebox.showerror("Error", "Invalid IP address")
+            return
+
+        ip_version = ip_obj.version
+
         try:
-            if '.' in subnet_mask or ':' in subnet_mask:
-                subnet_mask = '/' + str(ipaddress.ip_network(f"0.0.0.0/{subnet_mask}", strict=False).prefixlen)
+            cidr = int(subnet_mask[1:])
+            max_cidr = 32 if ip_version == 4 else 128
+            if 0 <= cidr <= max_cidr:
+                subnet_mask = cidr_to_subnet_mask(cidr, ip_version)
             else:
-                subnet_mask = '/' + subnet_mask
+                messagebox.showerror("Error", f"Invalid CIDR notation for IPv{ip_version}")
+                return
         except ValueError:
             messagebox.showerror("Error", "Invalid subnet mask")
             return
-        
-    new_subnet_prefix = new_subnet_prefix_field.get()
-    if new_subnet_prefix:
-        if new_subnet_prefix.startswith('/'):
-            new_subnet_prefix = new_subnet_prefix[1:]  # Αφαιρέστε την κάθετο αν υπάρχει
-        try:
-            new_subnet_prefix = int(new_subnet_prefix)
-        except ValueError:
-            messagebox.showerror("Error", "Invalid new subnet prefix")
+
+        if not is_valid_subnet_mask(subnet_mask, ip_version):
+            messagebox.showerror("Error", "Invalid subnet mask")
             return
 
-    print(f"IP Address: {ip_address}")
-    print(f"Subnet Mask: {subnet_mask}")
-
-    ip_obj = is_valid_ip(ip_address)
-    if not ip_obj:
-        messagebox.showerror("Error", "Invalid IP address")
-        return
-
-    ip_version = ip_obj.version
-
-    try:
-        cidr = int(subnet_mask[1:])
-        max_cidr = 32 if ip_version == 4 else 128
-        if 0 <= cidr <= max_cidr:
-            subnet_mask = cidr_to_subnet_mask(cidr, ip_version)
-            print(f"Converted CIDR to subnet mask: {subnet_mask}")
-        else:
-            messagebox.showerror("Error", f"Invalid CIDR notation for IPv{ip_version}")
-            return
-    except ValueError:
-        messagebox.showerror("Error", "Invalid subnet mask")
-        return
-
-    print(f"Subnet mask before validation: {subnet_mask}")
-    if not is_valid_subnet_mask(subnet_mask, ip_version):
-        messagebox.showerror("Error", "Invalid subnet mask")
-        return
-
-    try:
         if ip_version == 4:
             network = ipaddress.ip_network(f"{ip_address}/{cidr}", strict=False)
             result_text.set(f"Network address: {network.network_address}\n"
@@ -253,8 +280,12 @@ def calculate():
                             f"Last usable address: {last_usable}\n"
                             f"Number of subnets: {calculate_subnets(network, int(new_subnet_prefix)) if new_subnet_prefix else 'N/A'}\n"
                             f"Compressed IPv6: {ip_obj.compressed}")
+
     except ValueError as e:
-        messagebox.showerror("Error", f"Invalid network: {e}")
+        messagebox.showerror("Error", str(e))
+    except Exception as e:
+        messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {e}")
+
 
 
 
@@ -350,7 +381,7 @@ pdf_export_button.grid(row=3, column=4, pady=10)
 
 # Create flag buttons for language selection
 flag_frame = tk.Frame(root)
-flag_frame.grid(row=0, column=2, padx=10, pady=5, sticky=tk.E)
+flag_frame.grid(row=0, column=4, padx=10, pady=5, sticky=tk.NE)
 
 us_flag_button = tk.Button(flag_frame, image=us_flag, command=lambda: change_language("en"))
 us_flag_button.pack(side=tk.LEFT, padx=2)
@@ -361,6 +392,10 @@ gr_flag_button.pack(side=tk.LEFT, padx=2)
 result_text = tk.StringVar()
 result_label = tk.Label(root, textvariable=result_text, justify=tk.LEFT)
 result_label.grid(row=4, column=0, columnspan=3, sticky=tk.W, padx=10, pady=5)
+
+# Create visualize button
+visualize_button = tk.Button(root, text="Visualize", command=lambda: visualize_network(network, new_subnet_prefix), bg="lavender")
+visualize_button.grid(row=0, column=2,padx=10, pady=10, sticky=tk.NE)
 
 # Create debug text area
 debug_text = tk.Text(root, height=10, width=50)

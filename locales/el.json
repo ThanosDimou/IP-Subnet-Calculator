@@ -15,5 +15,6 @@
     "results_copied": "Τα αποτελέσματα αντιγράφηκαν στο πρόχειρο",
     "language": "Γλώσσα",
     "export_to_csv": "Εξαγωγή σε CSV",
-    "export_to_pdf": "Εξαγωγή σε PDF"
+    "export_to_pdf": "Εξαγωγή σε PDF",
+    "visualize": "Οπτικοποίηση Δικτύου"
 }
