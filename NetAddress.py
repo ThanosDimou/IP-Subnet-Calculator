@@ -14,9 +14,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-#test
 import networkx as nx
-import matplotlib.pyplot as plt
+
 
 vis_window = None
 fig = None
@@ -71,7 +70,7 @@ def export_to_pdf():
             styles = getSampleStyleSheet()
             elements = []
             
-            title_text = f"IP Calculation Results for {ip_address}"
+            title_text = f"IP Calculation Results for {ip_address} with subnet mask {subnet_mask_field.get()} and new subnet prefix {new_subnet_prefix_field.get()}"
             title = Paragraph(title_text, styles['Title'])
             elements.append(title)
             elements.append(Spacer(1, 12))
@@ -125,13 +124,13 @@ def visualize_network(network, new_prefix=None):
     plt.title("Network Visualization")
     plt.show()
 
-# Φόρτωση αρχείων γλώσσας
+# Load language files
 languages = {
     "en": load_language("en"),
     "el": load_language("el")
 }
 
-# Επιλεγμένη γλώσσα
+# Chosen language
 current_language = "en"
 texts = languages[current_language]
 
@@ -202,7 +201,7 @@ def calculate():
     global current_graph  # Χρήση της παγκόσμιας μεταβλητής
     global network  # Χρήση της παγκόσμιας μεταβλητής για το δίκτυο
     global new_subnet_prefix  # Χρήση της παγκόσμιας μεταβλητής για το νέο πρόθεμα
-    current_graph = None  # Καθαρίστε το προηγούμενο γράφημα
+    #current_graph = None  # Καθαρίστε το προηγούμενο γράφημα
 
     try:
         redirect_output()
@@ -252,6 +251,8 @@ def calculate():
         if not is_valid_subnet_mask(subnet_mask, ip_version):
             messagebox.showerror("Error", "Invalid subnet mask")
             return
+        
+        ip_class = get_ip_class(ip_obj)  # Load the ip class
 
         if ip_version == 4:
             network = ipaddress.ip_network(f"{ip_address}/{cidr}", strict=False)
@@ -263,6 +264,7 @@ def calculate():
                             f"Number of addresses: {network.num_addresses}\n"
                             f"Usable addresses: {network.num_addresses - 2}\n"
                             f"IP version: IPv{ip_version}\n"
+                            f"IP Class: {ip_class}\n"
                             f"First usable address: {network.network_address + 1}\n"
                             f"Last usable address: {network.broadcast_address - 1}\n"
                             f"Number of subnets: {calculate_subnets(network, int(new_subnet_prefix)) if new_subnet_prefix else 'N/A'}")
@@ -276,6 +278,7 @@ def calculate():
                             f"Number of addresses: {network.num_addresses}\n"
                             f"Usable addresses: {network.num_addresses}\n"
                             f"IP version: IPv{ip_version}\n"
+                            f"IP Class: {ip_class}\n"
                             f"First usable address: {first_usable}\n"
                             f"Last usable address: {last_usable}\n"
                             f"Number of subnets: {calculate_subnets(network, int(new_subnet_prefix)) if new_subnet_prefix else 'N/A'}\n"
@@ -285,8 +288,6 @@ def calculate():
         messagebox.showerror("Error", str(e))
     except Exception as e:
         messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {e}")
-
-
 
 
 def get_ip_class(ip):
