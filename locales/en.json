@@ -1,0 +1,20 @@
+{
+    "title": "Network Address Analyzer",
+    "ip_address": "IP Address:",
+    "subnet_mask": "Subnet Mask:",
+    "new_subnet_prefix": "New Subnet Prefix:",
+    "calculate": "Calculate",
+    "clear": "Clear",
+    "copy_results": "Copy Results",
+    "error": "Error",
+    "invalid_ip": "Invalid IP address",
+    "invalid_subnet_mask": "Invalid subnet mask",
+    "invalid_cidr": "Invalid CIDR notation for IPv",
+    "invalid_network": "Invalid network",
+    "copied": "Copied",
+    "results_copied": "Results copied to clipboard",
+    "language": "Language",
+    "export_to_csv" : "Export to CSV",
+    "export_to_pdf": "Export to PDF",
+    "visualize": "Visualize Network"
+}
