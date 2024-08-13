@@ -23,6 +23,7 @@ You can install the required packages using pip:
 
 ```bash
 pip install Pillow matplotlib networkx reportlab
+```
 
 ## Usage
 
@@ -80,4 +81,6 @@ Let me know if you need any further adjustments!
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
 
