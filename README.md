@@ -27,15 +27,15 @@ pip install Pillow matplotlib networkx reportlab
 
 ## Usage
 
-1. **IP Address: Enter a valid IPv4 or IPv6 address.
-2. **Subnet Mask: Enter the subnet mask corresponding to the IP address.
-3. **New Subnet Prefix: Enter the new prefix length for subnetting.
-4. **Calculate: Click this button to compute the number of new subnets that can be created.
+1. **IP Address**: Enter a valid IPv4 or IPv6 address.
+2. **Subnet Mask**: Enter the subnet mask corresponding to the IP address.
+3. **New Subnet Prefix**: Enter the new prefix length for subnetting.
+4. **Calculate**: Click this button to compute the number of new subnets that can be created.
 5. **Clear**: Click the "Clear" button to reset all input fields and results.
 6. **Copy Results**: Click the "Copy Results" button to copy the network information to the clipboard for easy sharing.
-7. **Export to CSV: Save the results as a CSV file.
-8. **Export to PDF: Save the results as a PDF file.
-9. **Visualize: Display a graphical representation of the network.
+7. **Export to CSV**: Save the results as a CSV file.
+8. **Export to PDF**: Save the results as a PDF file.
+9. **Visualize**: Display a graphical representation of the network.
 
 ## Language Support
 The application supports English and Greek. You can switch languages using the flags in the upper right corner of the window.
