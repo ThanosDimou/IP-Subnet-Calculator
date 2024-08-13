@@ -306,7 +306,7 @@ class IPCalculator:
                 f"Subnet mask: /{network.prefixlen}\n"
                 f"CIDR notation: /{network.prefixlen}\n"
                 f"Number of addresses: {num_addresses}\n"
-                f"Usable addresses: {num_addresses}\n"
+                f"Usable addresses: {num_addresses -1}\n"
                 f"IP version: IPv6\n"
                 f"IP Class: {ip_class}\n"
                 f"First usable address: {first_usable}\n"
