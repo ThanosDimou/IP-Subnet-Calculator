@@ -61,7 +61,7 @@ To run the NetAddress Analyzer, you need Python and Tkinter installed. Follow th
 ## Contributing
 We welcome contributions! Please fork the repository and create a pull request with your changes. Ensure your code follows the existing style and includes appropriate tests.
 
-##Acknowledgments**
+##Acknowledgments
 - Python - Programming Language
 - Tkinter - GUI toolkit
 - Pillow - Image processing library
