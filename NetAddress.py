@@ -1,4 +1,4 @@
-# Βασικές βιβλιοθήκες
+# Basic libraries
 import sys
 import csv
 import io
@@ -6,15 +6,15 @@ import json
 from pathlib import Path
 from typing import Optional, Union, Dict, Any
 
-# GUI βιβλιοθήκες
+# Gui libraries
 import tkinter as tk
 from tkinter import messagebox, ttk, filedialog
 from PIL import Image, ImageTk
 
-# Δικτυακές βιβλιοθήκες
+# Network Libraries
 import ipaddress
 
-# Βιβλιοθήκες για εξαγωγή και οπτικοποίηση
+# Libraries for export and visualization
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
@@ -43,13 +43,13 @@ class IPCalculator:
     def setup_gui(self):
         self.root.title("IP Calculator")
 
-        # Δημιουργία και τοποθέτηση των widgets
+        # Create and place widgets
         self.create_input_fields()
         self.create_buttons()
         self.create_result_display()
         self.create_debug_area()
 
-        # Ρύθμιση του grid
+        # Arrangement of the grid
         self.root.grid_columnconfigure((0, 1, 2), weight=1)
 
     def create_input_fields(self):
