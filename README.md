@@ -1,86 +1,87 @@
-# NetAddress Analyzer
+# IP Subnet Calculator
 
-NetAddress Analyzer is a Python application that assists users in calculating subnets, validating IP addresses, and subnet masks. The application supports both IPv4 and IPv6 addresses and includes functionality for visualizing networks, exporting results to CSV and PDF formats, and switching between English and Greek languages.
+![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-## Features
+A user-friendly desktop application built with Python and Tkinter for calculating and analyzing IPv4/IPv6 network subnets.
 
-- **IP Address and Subnet Mask Validation:** Validates user input for IP addresses and subnet masks.
-- **Subnet Calculation:** Calculates the number of subnets that can be created based on the given IP address and subnet mask.
-- **Language Support:** Switch between English and Greek languages.
-- **Export Options:** Export calculation results to CSV or PDF files.
-- **Network Visualization:** Visualize the network and its subnets in a graphical format.
+![IP Calculator Screenshot](images/screenshot.png)
 
-## Requirements
+## Key Features
 
-- Python 3.x
-- Tkinter (included with Python)
-- Pillow
-- Matplotlib
-- NetworkX
-- ReportLab
+* **Full IPv4 & IPv6 Support:** Performs detailed calculations for both major IP versions.
+* **Subnetting Calculator:** Easily subdivide a larger network into multiple smaller subnets by providing a new prefix.
+* **Detailed Network Analysis:** Calculates essential information such as:
+    * Network & Broadcast Addresses
+    * Netmask & Wildcard Mask
+    * CIDR Notation
+    * Total & Usable Host Counts
+    * Usable Host Range
+* **Network Visualization:** Generates a graphical, star-topology representation of the main network and its subnets.
+* **Data Export:** Export calculation results to user-friendly **CSV** and **PDF** formats.
+* **Multilingual Interface:** Supports both **English** and **Greek**.
 
-You can install the required packages using pip:
+## Technologies Used
 
-```bash
-pip install Pillow matplotlib networkx reportlab
-```
+* **Core:** Python 3
+* **GUI:** Tkinter (via the modern `ttk` themed widgets)
+* **Network Logic:** `ipaddress` standard library
+* **Visualization:** `Matplotlib` & `NetworkX`
+* **PDF/Image Handling:** `reportlab` & `Pillow`
+
+## Installation & Setup
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+* Python 3.8 or newer
+* pip (Python package installer)
+
+### Steps
+
+1.  **Clone the repository:**
+    ```sh
+    git clone [https://github.com/ThanosDimou/IP-Subnet-Calculator.git](https://github.com/ThanosDimou/IP-Subnet-Calculator.git)
+    cd IP-Calculator
+    ```
+    2.  **Create and activate a virtual environment (Recommended):**
+    * **Windows:**
+        ```sh
+        python -m venv venv
+        .\venv\Scripts\activate
+        ```
+    * **macOS / Linux:**
+        ```sh
+        python3 -m venv venv
+        source venv/bin/activate
+        ```
+
+3.  **Install the required packages:**
+    ```sh
+    pip install -r requirements.txt
+    ```
 
 ## Usage
 
-1. **IP Address**: Enter a valid IPv4 or IPv6 address.
-2. **Subnet Mask**: Enter the subnet mask corresponding to the IP address.
-3. **New Subnet Prefix**: Enter the new prefix length for subnetting.
-4. **Calculate**: Click this button to compute the number of new subnets that can be created.
-5. **Clear**: Click the "Clear" button to reset all input fields and results.
-6. **Copy Results**: Click the "Copy Results" button to copy the network information to the clipboard for easy sharing.
-7. **Export to CSV**: Save the results as a CSV file.
-8. **Export to PDF**: Save the results as a PDF file.
-9. **Visualize**: Display a graphical representation of the network.
+Once the setup is complete, run the application with the following command:
 
-## Language Support
-The application supports English and Greek. You can switch languages using the flags in the upper right corner of the window.
+```sh
+python main.py
+```
 
-
-## Installation
-
-To run the NetAddress Analyzer, you need Python and Tkinter installed. Follow these steps:
-
-1. Clone the repository:
-    ```
-    git clone https://github.com/yourusername/NetAddress-Analyzer.git
-    ```
-2. Navigate to the project directory:
-    ```
-    cd NetAddress-Analyzer
-    ```
-3. Run the application:
-    ```
-    python netaddress_analyzer.py
-    ```
-
-## Contributing
-We welcome contributions! Please fork the repository and create a pull request with your changes. Ensure your code follows the existing style and includes appropriate tests.
-
-## Acknowledgments
-- Python - Programming Language
-- Tkinter - GUI toolkit
-- Pillow - Image processing library
-- Matplotlib - Plotting library
-- NetworkX - Network analysis library
-- ReportLab - PDF generation library
-
-
-### Instructions
-
-- Replace `https://github.com/your-username/netaddress-analyzer.git` with the actual URL of your repository.
-- Adjust any additional information specific to your project as needed.
-
-Let me know if you need any further adjustments!
-
+1.  Enter the IP Address and Subnet Mask (in CIDR or dotted-decimal format).
+2.  (Optional) Enter a "New Subnet Prefix" to perform subnetting calculations.
+3.  Click **Calculate** to see the results.
+4.  Use the **Visualize**, **Export**, or **Copy** buttons to manage the results.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
+## Acknowledgements
+
+* A great README template is a good start for any project.
+* Icons used for language selection flags.
 
 
