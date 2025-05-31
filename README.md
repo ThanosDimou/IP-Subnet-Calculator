@@ -81,7 +81,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgements
 
-* A great README template is a good start for any project.
-* Icons used for language selection flags.
 
 
