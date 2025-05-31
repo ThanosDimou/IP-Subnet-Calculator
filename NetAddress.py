@@ -280,7 +280,8 @@ class IPCalculator:
             # 3. Process New Subnet Prefix (if provided)
             self.new_subnet_prefix = None
             if new_prefix_str:
-                self.new_subnet_prefix = int(new_prefix_str)
+                clean_prefix_str = new_prefix_str.lstrip('/').strip()
+                self.new_subnet_prefix = int(clean_prefix_str)
                 if not (cidr < self.new_subnet_prefix <= max_prefix):
                     raise ValueError(f"New prefix must be > {cidr} and <= {max_prefix}.")
 
