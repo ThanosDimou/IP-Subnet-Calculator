@@ -80,6 +80,11 @@ python main.py
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgements
-
+* [Python ipaddress](https://docs.python.org/3/library/ipaddress.html) — Core network calculation library
+* [Matplotlib](https://matplotlib.org/) — Network visualization
+* [NetworkX](https://networkx.org/) — Graph generation for subnet topology
+* [Pillow](https://python-pillow.org/) — Image handling for flag icons
+* [ReportLab](https://www.reportlab.com/) — PDF export functionality
+* [Tkinter](https://docs.python.org/3/library/tkinter.html) — GUI framework
 
 
