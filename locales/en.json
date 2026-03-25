@@ -1,8 +1,9 @@
 {
     "title": "Network Address Analyzer",
+    "main_title": "IP Subnet Calculator",
     "ip_address": "IP Address:",
-    "subnet_mask": "Subnet Mask:",
-    "new_subnet_prefix": "New Subnet Prefix:",
+    "subnet_mask": "Subnet Mask / CIDR:",
+    "new_subnet_prefix": "New Subnet Prefix (for subnetting):",
     "calculate": "Calculate",
     "clear": "Clear",
     "copy_results": "Copy Results",
@@ -14,7 +15,7 @@
     "copied": "Copied",
     "results_copied": "Results copied to clipboard",
     "language": "Language",
-    "export_to_csv" : "Export to CSV",
+    "export_to_csv": "Export to CSV",
     "export_to_pdf": "Export to PDF",
     "visualize": "Visualize Network"
 }

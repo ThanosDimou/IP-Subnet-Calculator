@@ -1,8 +1,9 @@
 {
     "title": "Αναλυτής Διευθύνσεων Δικτύου",
+    "main_title": "Αριθμομηχανή Υποδικτύων IP",
     "ip_address": "Διεύθυνση IP:",
-    "subnet_mask": "Μάσκα Υποδικτύου:",
-    "new_subnet_prefix": "Νέο Πρόθεμα Υποδικτύου:",
+    "subnet_mask": "Μάσκα Υποδικτύου / CIDR:",
+    "new_subnet_prefix": "Νέο Πρόθεμα Υποδικτύου (για subnetting):",
     "calculate": "Υπολογισμός",
     "clear": "Καθαρισμός",
     "copy_results": "Αντιγραφή Αποτελεσμάτων",
