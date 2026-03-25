@@ -43,7 +43,7 @@ To get a local copy up and running, follow these simple steps.
 1.  **Clone the repository:**
     ```sh
     git clone [https://github.com/ThanosDimou/IP-Subnet-Calculator.git](https://github.com/ThanosDimou/IP-Subnet-Calculator.git)
-    cd IP-Calculator
+    cd IP-Subnet-Calculator
     ```
     2.  **Create and activate a virtual environment (Recommended):**
     * **Windows:**
